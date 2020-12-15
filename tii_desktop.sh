@@ -1,7 +1,7 @@
 #!/bin/bash
 #Author: Benjamin Perseghetti
 #Email: bperseghetti@rudislabs.com
-#For installing default NXP ROS workspace
+#For installing default TII ROS workspace
 
 UBUNTU_RELEASE="`lsb_release -rs`"
 if [[ "${UBUNTU_RELEASE}" == "14.04" ]]; then
@@ -149,10 +149,10 @@ fi
 if [ ! -d "/home/${USER}/git/nxp_ws" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git
-	git clone https://github.com/rudislabs/nxp_ws.git
+	git clone https://github.com/rudislabs/tii_ws.git
 else
-	printf "\nGit repo already exists at /home/${USER}/git/nxp_ws, not re-cloning.\n"
+	printf "\nGit repo already exists at /home/${USER}/git/tii_ws, not re-cloning.\n"
 fi
 
-printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/nxp_ws/README.md\n"
+printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/tii_ws/README.md\n"
 
