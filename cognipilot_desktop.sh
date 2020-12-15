@@ -1,7 +1,7 @@
 #!/bin/bash
 #Author: Benjamin Perseghetti
 #Email: bperseghetti@rudislabs.com
-#For installing default TII ROS workspace
+#For installing default CogniPilot
 
 UBUNTU_RELEASE="`lsb_release -rs`"
 if [[ "${UBUNTU_RELEASE}" == "14.04" ]]; then
@@ -146,13 +146,13 @@ if [ ! -d "/home/${USER}/git" ];then
 	mkdir -p /home/${USER}/git
 fi
 
-if [ ! -d "/home/${USER}/git/tii_ws" ];then 
+if [ ! -d "/home/${USER}/git/zephyr" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git
-	git clone https://github.com/rudislabs/tii_ws.git
+	git clone https://github.com/CogniPilot/zephyr.git
 else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_ws, not re-cloning.\n"
+	printf "\nGit repo already exists at /home/${USER}/git/zephyr, not re-cloning.\n"
 fi
 
-printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/tii_ws/README.md\n"
+printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/zephyr/README.md\n"
 
