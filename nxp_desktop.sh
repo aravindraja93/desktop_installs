@@ -141,18 +141,43 @@ if [ "$sshGit" == "true" ]; then
 	read -p "Press any key to continue after fully exiting chrome... " -n1 -s
 fi
 
-if [ ! -d "/home/${USER}/git" ];then 
-	printf "\nCreating /home/${USER}/git directory\n"
-	mkdir -p /home/${USER}/git
+if [ ! -d "/home/${USER}/git/nxp_ros2_ws/src" ];then 
+	printf "\nCreating /home/${USER}/git/nxp_ros2_ws/src directory\n"
+	mkdir -p /home/${USER}/git/nxp_ros2_ws/src
 fi
 
-if [ ! -d "/home/${USER}/git/nxp_ws" ];then 
+if [ ! -d "/home/${USER}/git/nxp_ros2_ws/src/nxp_cup_bringup" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/nxp_ros2_ws/src
+	git clone https://github.com/rudislabs/nxp_cup_bringup.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/nxp_ros2_ws/src/nxp_cup_bringup, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/nxp_ros2_ws/src/nxp_cup_vision" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/nxp_ros2_ws/src
+	git clone https://github.com/rudislabs/nxp_cup_vision.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/nxp_ros2_ws/src/nxp_cup_vision, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/nxp_gazebo" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git
-	git clone https://github.com/rudislabs/nxp_ws.git
+	git clone https://github.com/rudislabs/nxp_gazebo.git
 else
-	printf "\nGit repo already exists at /home/${USER}/git/nxp_ws, not re-cloning.\n"
+	printf "\nGit repo already exists at /home/${USER}/git/nxp_gazebo, not re-cloning.\n"
 fi
 
-printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/nxp_ws/README.md\n"
+if [ ! -d "/home/${USER}/git/PX4-Autopilot" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git
+	git clone https://github.com/PX4/PX4-Autopilot.git
+	cd /home/${USER}/git/PX4-Autopilot
+	git checkout pr-cupcar
+else
+	printf "\nGit repo already exists at /home/${USER}/git/PX4-Autopilot, not re-cloning.\n"
+fi
 
+printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/nxp_gazebo/README.md\n"
