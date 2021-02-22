@@ -162,6 +162,22 @@ else
 	printf "\nGit repo already exists at /home/${USER}/git/nxp_ros2_ws/src/nxp_cup_vision, not re-cloning.\n"
 fi
 
+if [ ! -d "/home/${USER}/git/nxp_ros2_ws/src/px4_ros_com" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/nxp_ros2_ws/src
+	git clone https://github.com/rudislabs/px4_ros_com.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/nxp_ros2_ws/src/px4_ros_com, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/nxp_ros2_ws/src/px4_msgs" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/nxp_ros2_ws/src
+	git clone https://github.com/rudislabs/px4_msgs.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/nxp_ros2_ws/src/px4_msgs, not re-cloning.\n"
+fi
+
 if [ ! -d "/home/${USER}/git/nxp_gazebo" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git
