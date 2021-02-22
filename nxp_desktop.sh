@@ -182,6 +182,8 @@ if [ ! -d "/home/${USER}/git/nxp_gazebo" ];then
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git
 	git clone https://github.com/rudislabs/nxp_gazebo.git
+	cd /home/${USER}/git/nxp_gazebo
+	git checkout ros2
 else
 	printf "\nGit repo already exists at /home/${USER}/git/nxp_gazebo, not re-cloning.\n"
 fi
