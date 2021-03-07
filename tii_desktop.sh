@@ -20,9 +20,9 @@ fi
 if [ "$1" == "-h" ]; then
 	echo "Usage: $0 [-s <ssh_github_key_install>][-m <minimal_install>][-g <git_install>][-p <place_holder>]"
 	echo "-s flag is used if you already have a github account and you want to register newly generated ssh keys [0, 1]"
-	echo "-m flag is used if you only want to install minimal components [0, 1]"
+	echo "-f flag is used if you want a full install [0, 1] defaults to 1"
 	echo "-g flag is used if you only want to clone git repo [0, 1]"
-	echo "-p flag not implemenmted yet"
+	echo "-p flag not implemented yet"
 	exit 1
 fi
 
@@ -31,20 +31,20 @@ do
 	case "${option}"
 	in
 		s) SG=${OPTARG};;
-		m) MI=${OPTARG};;
+		f) FI=${OPTARG};;
 		g) GCO=${OPTARG};;
 		p) PH=${OPTARG};;
 	esac
 done
 
 sshGit=${SG:=0}
-minInstall=${MI:=0}
+fullInstall=${FI:=1}
 gitCloneOnly=${GCO:=0}
 
-if [ "$minInstall" == "True" ] || [ "$minInstall" == "1" ] || [ "$minInstall" == "true" ]; then
-	minInstall="true"
+if [ "$fullInstall" == "True" ] || [ "$fullInstall" == "1" ] || [ "$fullInstall" == "true" ]; then
+	fullInstall="true"
 else
-	minInstall="false"
+	fullInstall="false"
 fi
 if [ "$sshGit" == "True" ] || [ "$sshGit" == "1" ] || [ "$sshGit" == "true" ]; then
 	sshGit="true"
@@ -57,7 +57,7 @@ else
 	gitCloneOnly="false"
 fi
 
-if [ "$minInstall" == "false" ] && [ "$gitCloneOnly" == "false" ]; then
+if [ "$fullInstall" == "true" ] && [ "$gitCloneOnly" == "false" ]; then
 	printf "\nPerforming full install.\n"
 	wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 	sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
@@ -77,6 +77,7 @@ if [ "$minInstall" == "false" ] && [ "$gitCloneOnly" == "false" ]; then
 		vim \
 		psensor \
 		indicator-multiload \
+		curl \
 		htop
 	sudo -H pip3 install jupyterlab
 	printf "\nSetting Wallpaper to something scenic.\n"
@@ -85,43 +86,31 @@ if [ "$minInstall" == "false" ] && [ "$gitCloneOnly" == "false" ]; then
 	printf "\n\nSetting up launch bar with default icons.\n"
 	dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'sublime-text_subl.desktop', 'org.gnome.Terminal.desktop', 'slack_slack.desktop', 'google-chrome.desktop', 'blender_blender.desktop', 'gimp_gimp.desktop', 'simplescreenrecorder.desktop', 'snap-store_ubuntu-software.desktop']"
 
-elif [ "$minInstall" == "true" ] && [ "$gitCloneOnly" == "false" ]; then
+elif [ "$fullInstall" == "false" ] && [ "$gitCloneOnly" == "false" ]; then
 	printf "\nPerforming minimal install.\n"
-	wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-	sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 	sudo apt-get update -y
 	sudo apt-get dist-upgrade -y
-	sudo snap install blender --classic
 	sudo apt-get install -y \
 		python3-pip\
 		checkinstall \
-		google-chrome-stable \
 		xclip \
 		git \
-		simplescreenrecorder \
 		vim \
-		psensor \
-		indicator-multiload \
+		curl \
 		htop
-	sudo -H pip3 install jupyterlab
-	printf "\nSetting Wallpaper to something scenic.\n"
-	wget -O /home/$USER/Pictures/OhioStream.jpg "https://github.com/rudislabs/wallpaper/raw/main/OhioStream.jpg"
-	gsettings set org.gnome.desktop.background picture-uri file:////home/$USER/Pictures/OhioStream.jpg
-	printf "\n\nSetting up launch bar with minimal install default icons.\n"
-	dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop', 'google-chrome.desktop', 'blender_blender.desktop', 'simplescreenrecorder.desktop', 'snap-store_ubuntu-software.desktop']"
+	dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop']"
 else
 	printf "\nPerforming a git clone only.\n"
 fi
-
 
 if [ "$sshGit" == "true" ]; then
 	printf "\n\n***Warning! This will install new SSH keys!***\n"
 	echo "Do you wish to proceed?"
 	select yn in "Yes" "No"; do
-    	case $yn in
-        	Yes ) break;;
-        	No ) printf "\nPlease rerun with -s 0 \n***EXITING***\n";exit 1;;
-    	esac
+		case $yn in
+			Yes ) break;;
+			No ) printf "\nPlease rerun with -s 0 \n***EXITING***\n";exit 1;;
+		esac
 	done
 	printf "\nCreating SSH Key for use with github, use your github email address and optional passphrase.\n"
 	ssh-keygen
@@ -141,18 +130,57 @@ if [ "$sshGit" == "true" ]; then
 	read -p "Press any key to continue after fully exiting chrome... " -n1 -s
 fi
 
-if [ ! -d "/home/${USER}/git" ];then 
-	printf "\nCreating /home/${USER}/git directory\n"
-	mkdir -p /home/${USER}/git
+if [ ! -d "/home/${USER}/git/tii_ros2_ws/src" ];then 
+	printf "\nCreating /home/${USER}/git/tii_ros2_ws/src directory\n"
+	mkdir -p /home/${USER}/git/tii_ros2_ws/src
 fi
 
-if [ ! -d "/home/${USER}/git/tii_ws" ];then 
+if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/tii_gazebo_bringup" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/tii_ros2_ws/src
+	git clone https://github.com/rudislabs/tii_gazebo_bringup.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/tii_gazebo_bringup, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/qualisys_ros2" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/tii_ros2_ws/src
+	git clone https://github.com/rudislabs/qualisys_ros2.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/qualisys_ros2, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/px4_ros_com" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/tii_ros2_ws/src
+	git clone -b tii_v1 https://github.com/rudislabs/px4_ros_com.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/px4_ros_com, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/px4_msgs" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git/tii_ros2_ws/src
+	git clone -b tii_v1 https://github.com/rudislabs/px4_msgs.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/px4_msgs, not re-cloning.\n"
+fi
+
+if [ ! -d "/home/${USER}/git/tii_gazebo" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git
-	git clone https://github.com/rudislabs/tii_ws.git
+	git clone https://github.com/rudislabs/tii_gazebo.git
 else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_ws, not re-cloning.\n"
+	printf "\nGit repo already exists at /home/${USER}/git/tii_gazebo, not re-cloning.\n"
 fi
 
-printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/tii_ws/README.md\n"
+if [ ! -d "/home/${USER}/git/PX4-Autopilot" ];then 
+	printf "\nNow cloning git repository using HTTPS.\n"
+	cd /home/${USER}/git
+	git clone -b tii_v1 https://github.com/rudislabs/PX4-Autopilot.git
+else
+	printf "\nGit repo already exists at /home/${USER}/git/PX4-Autopilot, not re-cloning.\n"
+fi
 
+printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/tii_gazebo/README.md\n"
