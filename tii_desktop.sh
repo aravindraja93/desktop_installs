@@ -135,52 +135,12 @@ if [ ! -d "/home/${USER}/git/tii_ros2_ws/src" ];then
 	mkdir -p /home/${USER}/git/tii_ros2_ws/src
 fi
 
-if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/tii_gazebo_bringup" ];then 
+if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/sim_gazebo_bringup" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/git/tii_ros2_ws/src
-	git clone https://github.com/rudislabs/tii_gazebo_bringup.git
+	git clone -b tii https://github.com/rudislabs/sim_gazebo_bringup.git
 else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/tii_gazebo_bringup, not re-cloning.\n"
+	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/sim_gazebo_bringup, not re-cloning.\n"
 fi
 
-if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/qualisys_ros2" ];then 
-	printf "\nNow cloning git repository using HTTPS.\n"
-	cd /home/${USER}/git/tii_ros2_ws/src
-	git clone https://github.com/rudislabs/qualisys_ros2.git
-else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/qualisys_ros2, not re-cloning.\n"
-fi
-
-if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/px4_ros_com" ];then 
-	printf "\nNow cloning git repository using HTTPS.\n"
-	cd /home/${USER}/git/tii_ros2_ws/src
-	git clone -b tii_v1 https://github.com/rudislabs/px4_ros_com.git
-else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/px4_ros_com, not re-cloning.\n"
-fi
-
-if [ ! -d "/home/${USER}/git/tii_ros2_ws/src/px4_msgs" ];then 
-	printf "\nNow cloning git repository using HTTPS.\n"
-	cd /home/${USER}/git/tii_ros2_ws/src
-	git clone -b tii_v1 https://github.com/rudislabs/px4_msgs.git
-else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_ros2_ws/src/px4_msgs, not re-cloning.\n"
-fi
-
-if [ ! -d "/home/${USER}/git/tii_gazebo" ];then 
-	printf "\nNow cloning git repository using HTTPS.\n"
-	cd /home/${USER}/git
-	git clone https://github.com/rudislabs/tii_gazebo.git
-else
-	printf "\nGit repo already exists at /home/${USER}/git/tii_gazebo, not re-cloning.\n"
-fi
-
-if [ ! -d "/home/${USER}/git/PX4-Autopilot" ];then 
-	printf "\nNow cloning git repository using HTTPS.\n"
-	cd /home/${USER}/git
-	git clone -b tii_v1 https://github.com/rudislabs/PX4-Autopilot.git
-else
-	printf "\nGit repo already exists at /home/${USER}/git/PX4-Autopilot, not re-cloning.\n"
-fi
-
-printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/tii_gazebo/README.md\n"
+printf "\nAll done! Please continue by following the installation instructions in:\n\t/home/${USER}/git/tii_ros2_ws/src/sim_gazebo_bringup/scripts/foxy_installs.sh\n"
