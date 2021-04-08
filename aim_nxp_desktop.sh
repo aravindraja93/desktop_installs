@@ -1,7 +1,7 @@
 #!/bin/bash
 #Author: Benjamin Perseghetti
 #Email: bperseghetti@rudislabs.com
-#For installing default NXP ROS workspace
+#For installing default NXP AIM ROS workspace
 
 UBUNTU_RELEASE="`lsb_release -rs`"
 if [[ "${UBUNTU_RELEASE}" == "14.04" ]]; then
@@ -138,9 +138,9 @@ fi
 if [ ! -d "/home/${USER}/ros2_ws/src/sim_gazebo_bringup" ];then 
 	printf "\nNow cloning git repository using HTTPS.\n"
 	cd /home/${USER}/ros2_ws/src
-	git clone -b nxp https://github.com/rudislabs/sim_gazebo_bringup.git
+	git clone -b aim https://github.com/rudislabs/sim_gazebo_bringup.git
 else
 	printf "\nGit repo already exists at /home/${USER}/ros2_ws/src/sim_gazebo_bringup, not re-cloning.\n"
 fi
 
-printf "\nAll done! Please continue by following the installation instructions and run (if needed):\n\t/home/${USER}/ros2_ws/src/sim_gazebo_bringup/scripts/foxy_installs.sh\n"
+printf "\nAll done! Please continue by following the installation instructions and running in:\n\t/home/${USER}/ros2_ws/src/sim_gazebo_bringup/scripts/foxy_installs.sh\n"
